@@ -22,7 +22,7 @@ mongoose.connect(process.env.DATABASE_URL,{
 })
 
 // app.use(cors());
-app.use(morgan('combined'))
+// app.use(morgan())
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend", "build")))
 

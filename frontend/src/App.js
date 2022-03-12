@@ -8,10 +8,18 @@ const customStyle={
   padding:'10px 20px',
 }
 
+const btn={
+  border:'1px solid #000',
+  padding:'3px 8px',
+  borderRadius:'5px',
+  cursor:'pointer',
+}
+
 const App =()=>{
   const [msg,setMsg]=useState('');
   const [msgs,setMsgs]=useState([]);
   const [dataPosted,setDataPosted]=useState(true);
+  const [_id,setId]=useState('');
 
   useEffect(()=>{
       axios.get('/api/')
@@ -37,6 +45,13 @@ const App =()=>{
    
   }
 
+  const onUpdateHandler=async()=>{
+    // alert(msg);
+     const upt=await axios.put('/api/',{msg,_id});
+     console.log(upt);
+     setDataPosted(preState=>!preState);
+  }
+
   return(
     <>
       <div style={customStyle}>
@@ -46,14 +61,21 @@ const App =()=>{
         onChange={(e)=>setMsg(e.target.value)}
         />
         <span>&nbsp;</span>
-        <button onClick={onClickHandler}>click</button>
+        {
+          !_id?<button onClick={onClickHandler}>click</button>:<button onClick={onUpdateHandler}>update</button>
+        }
       </div>
       <div style={customStyle}>
           {
             msgs.map((el)=>{
-              return (<p key={el._id}>
-                {el.msg}
-              </p>)
+              return (
+              <p key={el._id}>
+                {el.msg} <span style={btn} onClick={()=>{
+                  setMsg(el.msg)
+                  setId(el._id)
+                  }}>edit</span>
+              </p>
+              )
             })
           }
       </div>
